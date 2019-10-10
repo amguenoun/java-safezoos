@@ -60,4 +60,10 @@ public class AdminController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
+
+	@DeleteMapping(value = "zoos/{zooid}/animals/{animalid}")
+	public ResponseEntity<?>  removeAnimalFromZoo(@PathVariable long zooid, @PathVariable long animalid){
+		zooService.deleteAnimal(zooid, animalid);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 }

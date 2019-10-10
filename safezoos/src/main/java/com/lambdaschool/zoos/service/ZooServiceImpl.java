@@ -2,6 +2,7 @@ package com.lambdaschool.zoos.service;
 
 import com.lambdaschool.zoos.model.Telephone;
 import com.lambdaschool.zoos.model.Zoo;
+import com.lambdaschool.zoos.repository.AnimalRepository;
 import com.lambdaschool.zoos.repository.ZooRepository;
 import org.hibernate.bytecode.enhance.internal.bytebuddy.EnhancerImpl;
 import org.slf4j.Logger;
@@ -20,6 +21,9 @@ public class ZooServiceImpl implements ZooService
 
     @Autowired
     private ZooRepository zoorepos;
+
+    @Autowired
+    private AnimalRepository animalrepo;
 
     @Override
     public ArrayList<Zoo> findAll()
@@ -100,5 +104,19 @@ public class ZooServiceImpl implements ZooService
 
         logger.info("Creating a Zoo");
         return zoorepos.save(currentZoo);
+    }
+
+    @Transactional
+    @Override
+    public void deleteAnimal(long zooid, long animalid) {
+        zoorepos.findById(zooid).orElseThrow(() -> new EntityNotFoundException("Zoo id " + zooid + "not found"));
+        animalrepo.findById(animalid).orElseThrow(() -> new EntityNotFoundException("Animal id " + animalid + "not found"));
+
+        if(zoorepos.checkZooAnimalCombo(zooid, animalid).getCount() > 0){
+            zoorepos.deleteAnimalFromZoo(zooid, animalid);
+        }
+        else{
+            throw new EntityNotFoundException("Zoo and Animal Combination Does Not Exists");
+        }
     }
 }
