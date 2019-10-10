@@ -29,4 +29,9 @@ public class ZooController
         return new ResponseEntity<>(zooService.findZooById(id), HttpStatus.OK);
     }
 
+    @GetMapping(value = "/name/{name}", produces = {"application/json"})
+	public ResponseEntity<?> getZooByName(@PathVariable String name){
+    	return new ResponseEntity<>(zooService.findZooByName(name), HttpStatus.OK);
+	}
+
 }
