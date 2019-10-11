@@ -33,4 +33,15 @@ public class AnimalServiceImpl implements AnimalService
         }
         return animal;
     }
+
+    @Override
+    public ArrayList<String> findAnimalCount() {
+        ArrayList<Animal> animalList = animalrepos.getAnimals();
+        ArrayList<String> animalCount = new ArrayList<>();
+        for(Animal a : animalList){
+            animalCount.add(a.getAnimaltype().toUpperCase() + " Count: " + animalrepos.countAnimal(a.getAnimalid()));
+        }
+
+        return animalCount;
+    }
 }

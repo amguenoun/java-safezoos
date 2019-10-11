@@ -5,6 +5,7 @@ import com.lambdaschool.zoos.view.JustTheCount;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface ZooRepository extends CrudRepository<Zoo, Long>
 {
@@ -14,4 +15,11 @@ public interface ZooRepository extends CrudRepository<Zoo, Long>
 
     @Query(value = "SELECT COUNT(*) as count FROM zooanimals WHERE zooid = :zooid AND animalid = :animalid", nativeQuery = true)
     JustTheCount checkZooAnimalCombo(long zooid, long animalid);
+
+    Zoo findByZoonameContainingIgnoreCase(String zooname);
+
+    @Transactional
+    @Modifying
+    @Query(value = "DELETE FROM zooanimals WHERE zooid = :zooid AND animalid = :animalid", nativeQuery = true)
+    void deleteAnimalFromZoo(long zooid, long animalid);
 }
